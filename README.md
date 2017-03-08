@@ -1,2 +1,2 @@
-# lambda_contact_form_node
+# Lambda Contact Form on NodeJS
 Send a contact form email with AWS Lambda, SES and NodeJS
