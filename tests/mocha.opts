@@ -1,0 +1,7 @@
+--compilers js:babel-register
+--require babel-polyfill
+--require should
+--recursive
+--colors
+
+tests/**/*.js

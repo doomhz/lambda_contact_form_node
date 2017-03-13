@@ -3,9 +3,6 @@ import { SES } from 'aws-sdk'
 import handlebars from 'handlebars'
 
 const TEMPLATES_PATH = `${__dirname}/../emails`
-const SES_CONFIG = {
-  region: 'eu-west-1'
-}
 const SES_PARAMS = {
   Destination: {
     ToAddresses: []
@@ -28,8 +25,8 @@ const SES_PARAMS = {
 
 export default class Emailer {
 
-  constructor (ses = new SES(SES_CONFIG)) {
-    this._ses = ses
+  constructor (client, config = {}) {
+    this._client = client || new SES(config)
   }
 
   async send ({ to, from, subject, template, data }) {
@@ -40,7 +37,7 @@ export default class Emailer {
     params.Message.Subject.Data = subject
     params.Message.Body.Html.Data = templateBody.html
     params.Message.Body.Text.Data = templateBody.text
-    const response = await this._ses.sendEmail(params).promise()
+    const response = await this._client.sendEmail(params).promise()
     return { response, params }
   }
 

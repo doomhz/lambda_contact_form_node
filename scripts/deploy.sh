@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-WORK_DIR=`pwd`
 FUNCTION_NAME="ContactForm"
-LAMBDA_CODE_PATH=$WORK_DIR/../build
+LAMBDA_CODE_PATH=./build
 ZIP_CODE_FILE=$FUNCTION_NAME.zip
 
+npm install
 npm run build
 cd $LAMBDA_CODE_PATH
 rm $ZIP_CODE_FILE
