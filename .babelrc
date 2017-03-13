@@ -3,6 +3,7 @@
     "env"
   ],
   "plugins": [
-    "fast-async"
+    "fast-async",
+    "add-module-exports"
   ]
 }
