@@ -5,13 +5,10 @@ const Emailer = require('./lib/emailer')
 
 function handler (event, context, callback) {
   console.log('Lambda params:', JSON.stringify(event))
+  
   const lambda = new Lambda(event, callback)
 
-  if (lambda.isApiGateway && lambda.params.method === 'OPTIONS') {
-    return lambda.respond()
-  }
-
-  if (lambda.currentRoute === 'POST_/v1/contact' || lambda.currentTask === 'CONTACT') {
+  if (lambda.currentRoute === 'POST_/ContactForm' || lambda.currentTask === 'CONTACT') {
     sendContactEmail(lambda.params)
     .then(({ response, params })=> {
       console.log('Email successfully sent.', response)
@@ -22,7 +19,8 @@ function handler (event, context, callback) {
       lambda.respond(null, 'Request error.')
     })
   } else {
-    lambda.respond(null, `Unknown invocation '${JSON.stringify(event)}'.`)
+    console.error('Unknown invocation.', JSON.stringify(event))
+    lambda.respond(null, 'Unknown invocation.')
   }
 }
 

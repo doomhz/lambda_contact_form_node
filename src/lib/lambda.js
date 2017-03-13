@@ -19,7 +19,7 @@ class Lambda {
 
   get params () {
     if (this.isApiGateway) {
-      return this._parseApiGatewayData()
+      return this._parseApiGatewayData().params
     }
     if (this.isTask) {
       return this._parseTaskData()
@@ -29,7 +29,7 @@ class Lambda {
 
   get currentRoute () {
     if (this.isApiGateway) {
-      return `${this.params.method}_${this.params.path}`
+      return `${this._parseApiGatewayData().method}_${this._parseApiGatewayData().path}`
     }
   }
 
@@ -50,14 +50,20 @@ class Lambda {
   }
 
   _parseApiGatewayData (event = this._event) {
+    const body = {}
+    try {
+      Object.assign(body, JSON.parse(event.body))
+    } catch (err) {
+      console.warn(`Could not parse event.body: ${event.body}`, err)
+    }
     return {
       method: event.httpMethod,
       path: event.resource,
       headers: event.headers,
       query: event.queryStringParameters,
       pathParams: event.pathParameters,
-      body: event.body,
-      params: Object.assign({}, event.queryStringParameters, event.pathParameters, event.body)
+      body,
+      params: Object.assign({}, event.queryStringParameters, event.pathParameters, body)
     }
   }
 
